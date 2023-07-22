@@ -1,0 +1,68 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    outline: none;
+}
+
+
+body {
+    font-family: "Open Sans", sans-serif;
+    background: #f6f9ff;
+}
+
+.logo {
+    line-height: 1;
+}
+
+.logo img {
+    max-height: 26px;
+    margin-right: 6px;
+}
+
+.logo span {
+    font-size: 26px;
+    font-weight: 700;
+    color: #012970;
+    font-family: "Nunito", sans-serif;
+}
+
+a {
+    color: #4154f1;
+    text-decoration: none;
+}
+.show-dropdown .dropdown-menu {
+    display: block;
+}
+
+
+h2{
+    font: 13px;
+    padding: 10px 0;
+}
+
+h2 > span {
+    font-size: 9px;
+}
+
+.status{
+    padding: 0.3rem 1rem;
+    border-radius: 30px;
+    font-weight: 600;
+    letter-spacing: 1;
+    font-size: 0.7rem;
+}
+.off{
+    background-color: #fff2d7;
+    color: #ffa705;
+}
+
+.ativo{
+    background-color: #d7effc;
+    color: #15a1fe;
+}
+
+.bloqueado{
+    background-color: #fafafa;
+    color: orangered;
+}
