@@ -68,7 +68,7 @@ class ClienteController {
 
     public function criarCliente() {
 
-        if (filter_input(INPUT_POST, 'form-criar-submeitted') !== null) {
+        if (filter_input(INPUT_POST, 'form-criar-submitted') !== null) {
             $username = filter_input(INPUT_POST, 'userName');
             $senha = filter_input(INPUT_POST, 'senha');
             $tipo = "Cliente";
@@ -163,13 +163,16 @@ class ClienteController {
                 $recibo = $value['recibo'];
                 $confirmar = 0;
                 $outdoor = $value['codOutdoor'];
+                
                 if ($recibo == null) {
-                    $this->outdoorService->alterarEstado($id, "A aguardar pagamento");
+                    $this->outdoorService->alterarEstado($outdoor, "A aguardar pagamento");
                 } else {
-                    $this->outdoorService->alterarEstado($id, "Por Validar Pamento");
+                    $this->outdoorService->alterarEstado($outdoor, "Por Validar Pamento");
                 }
                 $idGestor = $this->solicitacaoService->selectGestorPedidos();
                 $this->solicitacaoService->insert($idGestor, $Usuario->getId(), $imagem, $dataInicio, $dataInicio, $totalPagar, $outdoor, $recibo);
+                unset($_SESSION['carrinho']);
+                $this->redirect("index.php");
             }
         }
     }
