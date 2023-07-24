@@ -23,6 +23,11 @@ class GestorController {
         $this->outdoorService = new OutdoorService();
         $this->usuarioService = new UsuarioService();
         $this->solicitacaoService = new SolicitacaoService();
+        
+        if (isset($_SESSION['Usuario'])) {
+            $Us = unserialize($_SESSION['Usuario']);
+            $_SESSION['Usuario'] = serialize($this->usuarioService->selectById($Us->getId()));
+        }
 
         if (isset($_SESSION['Cliente']))
             $this->gestor = unserialize($_SESSION['Cliente']);
@@ -65,7 +70,7 @@ class GestorController {
     public function showGestorPageAddOutdoor() {
         if (isset($_SESSION['Usuario']))
             $usuario = unserialize($_SESSION['Usuario']);
-        include __DIR__ . '/../views/gestor/gestorViewCriar.php';
+ 
         if (isset($_POST['form-register-outdoor']) && $_POST['form-register-outdoor'] > 0) {
             $idGestor = $usuario->getId();
             $id = $_POST['form-register-outdoor'];
@@ -82,16 +87,16 @@ class GestorController {
                 $errors = $e->getErrors();
             }
         } else if (isset($_POST['form-register-outdoor']) && $_POST['form-register-outdoor'] == 0) {
-            $idGestor = $_SESSION['id'];
             $preco = $_POST['preco'];
             $tipo_outdoor = $_POST['tipo_outdoor'];
             $comuna = $_POST['Comuna'];
             try {
-                $this->gestorController->inserirOutdoor($tipo_outdoor, $comuna, $imagem, "Livre", $preco, $idGestor, "Nao");
+                $this->outdoorService->insert($tipo_outdoor, $preco, $comuna, $usuario->getId());
             } catch (ValidationException $e) {
                 $errors = $e->getErrors();
             }
         }
+        include __DIR__ . '/../views/gestor/gestorViewCriar.php';
     }
 
     public function showGestorAlterar() {

@@ -36,14 +36,13 @@ class OutdoordRepository implements IOutdoorRepository{
         }
     }
     
-    public function insert($tipo, $preco, $idComuna, $estado, $idGestor) {
+    public function insert($tipo, $preco, $idComuna, $idGestor) {
         try {
-            $stmt = $this->db->prepare("INSERT INTO `outdoor`(`tipo`, `preco`, `idComuna`, `estado`, `idUsuario`)"
-                    . "VALUES (:tipo,:preco, :idComuna,:estado,:idUsuario)");
+            $stmt = $this->db->prepare("INSERT INTO `outdoor`(`tipo`, `preco`, `idComuna`, `idUsuario`)"
+                    . "VALUES (:tipo,:preco, :idComuna,:idUsuario)");
             $stmt->bindParam(":tipo", $tipo);
             $stmt->bindParam(":preco", $preco);
             $stmt->bindValue(':idComuna', $idComuna);
-            $stmt->bindParam(":estado", $estado);
             $stmt->bindParam(":idUsuario", $idGestor);
             $stmt->execute();
             return true;

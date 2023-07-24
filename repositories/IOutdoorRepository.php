@@ -12,7 +12,7 @@
 interface IOutdoorRepository {
     //put your code here
     public function delete($id, $estado);
-    public function insert($tipo, $preco, $idComuna, $estado, $idGestor) ;
+    public function insert($tipo, $preco, $idComuna, $idGestor) ;
     public function update($id, $tipo, $preco, $comuna,$idGestor);
     public function selectCount();
     public function selectAll();

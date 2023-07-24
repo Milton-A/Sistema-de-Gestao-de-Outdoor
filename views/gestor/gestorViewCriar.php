@@ -7,6 +7,8 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true && $usuario->
     // Usuário logado
     if (isset($_GET['idO']))
         $idO = $_GET['idO'];
+    else
+        $idO = 0;
     require_once __DIR__ . '/../../controllers/GestorController.php';
     $gestorController = new GestorController();
     ?>
@@ -120,11 +122,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true && $usuario->
                     <div class="col-md-6">
                         <button type="submit" class="btn btn-primary w-100">Inserir</button>
                         <input type="hidden" name="form-register-outdoor" value="<?php
-                        if ($idO == NULL) {
-                            echo 0;
-                        } else {
                             echo $idO;
-                        }
                         ?>" />
                     </div>
                 </div>

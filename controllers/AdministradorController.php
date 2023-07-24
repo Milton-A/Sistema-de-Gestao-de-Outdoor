@@ -34,6 +34,10 @@ class AdministradorController {
         $this->outdoorService = new OutdoorService();
         $this->solicitacoesService = new SolicitacaoService();
         $this->usuarioService = new UsuarioService();
+        if (isset($_SESSION['Usuario'])) {
+            $Us = unserialize($_SESSION['Usuario']);
+            $_SESSION['Usuario'] = serialize($this->usuarioService->selectById($Us->getId()));
+        }
     }
 
     public function requesHandler() {
@@ -143,17 +147,22 @@ class AdministradorController {
     }
 
     public function showGestoresPage() {
-         $this->alterarEmail();
+        $this->alterarEmail();
         include __DIR__ . '/../views/administrador/administradorViewGestor.php';
     }
 
     public function showOutdoorPage() {
-         $this->alterarEmail();
+        $this->alterarEmail();
         include __DIR__ . '/../views/administrador/administradorViewOutdoors.php';
     }
 
     public function showSolicitacoesPage() {
-         $this->alterarEmail();
+        if (isset($_POST['enviarId'])) {
+            $idGestor = $_POST['novoId'];
+            $idPedido = $_POST['mostrarId'];
+            $this->solicitacoesService->update($idPedido, $idGestor);
+        }
+        $this->alterarEmail();
         include __DIR__ . '/../views/administrador/administradorViewOutdoorsPedidos.php';
     }
 

@@ -48,11 +48,12 @@
             </div>
             <div class="modal-body">
                 <form method="POST">
-                    <div class="form-group" id="idGe">
+                    <div class="form-group">
                         <label for="novoEmail">Novo Id Gestor</label>
+                        <input type="hidden" id='mostrarId' name="mostrarId"/>
                         <input type="number" class="form-control" id="novoId" name="novoId" placeholder="Insira o id do Gestor" required>
                     </div>
-                    <button type="submit" class="btn btn-primary" id="enviarId" name="enviar">Enviar</button>
+                    <button type="submit" class="btn btn-primary" id="enviarId" name="enviarId">Enviar</button>
                 </form>
             </div>
         </div>

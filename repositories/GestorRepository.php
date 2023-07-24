@@ -95,7 +95,7 @@ class GestorRepository implements IGestorRepository {
     }
 
     public function selectAll() {
-        $stmt = $this->db->prepare("SELECT g.id, `nome`, `email`, `idComuna`, `morada`, `telemovel`, u.username as username, `estado` FROM gestor g join usuario u on u.id = g.idUsuario where u.eliminado <> 'sim'");
+        $stmt = $this->db->prepare("SELECT g.idUsuario id, `nome`, `email`, `idComuna`, `morada`, `telemovel`, u.username as username, `estado` FROM gestor g join usuario u on u.id = g.idUsuario where u.eliminado <> 'sim'");
         $stmt->execute();
         $usersData = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $users = [];

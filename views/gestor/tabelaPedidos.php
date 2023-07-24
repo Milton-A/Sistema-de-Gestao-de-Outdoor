@@ -23,7 +23,7 @@
                 $usuario = unserialize($_SESSION['Usuario']);
             }
             foreach ($outdoors as $cada) {
-                if ($usuario->getUsername() != $cada->getIdGestor()) {
+                if ($usuario->getUsername() == $cada->getIdGestor()) {
                     if ($action2 == $cada->getEstadoOutdoor()) {
                         ?>
                         <tr>

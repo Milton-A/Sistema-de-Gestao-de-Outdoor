@@ -161,7 +161,7 @@ if (isset($_SESSION['Usuario']))
                                         <td><?php echo $cada->getTotalPagar(); ?></td>
                                         <td><?php echo $cada->getIdGestor(); ?></td>
                                         <td><span class="status ativo"><i class="fas fa-circle"></i> <?php echo $cada->getEstadoPedido(); ?></span></td>
-                                        <td><button class="btn btn-secondary" id="abrirModalSecundario">Abrir Modal Secundário</button></td>
+                                        <td><button class="btn btn-secondary btn-sm" id="adicioarRecibo">Add Recibo</button></td>
                                     </tr>
                                     <tr>
                                     <?php } ?>

@@ -44,25 +44,14 @@ $(document).ready(function () {
         });
     });
 
-    $(document).on('click', '#listarDados #alterarGestor', function () {
+    $(document).on('click', '#listarDados #alterarGestor', function (e) {
         $('#alterarGestorModal').modal('show');
-    });
-    
-    $(document).on('click', '#idge #enviarId', function () {
-        var idPedido = document.getElementById("novoId");
+        const idOutdoor = $(this).closest('tr').find('td:first').text();
+        console.log(idOutdoor);
+
+        let mostrar = document.getElementById("mostrarId");
+        mostrar.value = idOutdoor;
         
-        console.log(idPedido);
-        
-       /* $.ajax({
-            url: 'controllers/SolicitacaoController.php',
-            type: 'POST',
-            data: {
-                action: 'alterarGestor',
-                idPedido: idPedido
-            },
-            success: function (response) {
-            }
-        });*/
     });
 
     $(document).on('click', '#verGestores', function () {
@@ -111,16 +100,17 @@ $(document).ready(function () {
             $('#alterarEmailModal').modal('show');
         });
     });
-    
+
     $(document).ready(function () {
         $('.dro.verCarrinho').on('click', function () {
             $('#verCarrinhoModal').modal('show');
         });
     });
-    
-     $(document).ready(function () {
+
+    $(document).ready(function () {
         $('.dro.verSolicitacao').on('click', function () {
             $('#verSolicitacaoModal').modal('show');
         });
     });
+
 });

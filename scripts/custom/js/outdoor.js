@@ -6,12 +6,12 @@ for (let i = 0; i < btn.length; i++) {
     btn[i].addEventListener('click', function (e) {
         const file = document.querySelector('#idA');
         const element = e.target.parentElement;
-        const dataInicio = element.children[1].value;
-        const dataFim = element.children[2].value;
-        const imagem = $(this).parent().children().eq(3)[0].files[0];
-        const recibo = $(this).parent().children().eq(4)[0].files[0];
-        const idSelecionado = element.children[5].value;
-        const preco = element.children[6].value;
+        const dataInicio = element.children[0].value;
+        const dataFim = element.children[1].value;
+        const imagem = $(this).parent().children().eq(2)[0].files[0];
+        const recibo = $(this).parent().children().eq(3)[0].files[0];
+        const idSelecionado = element.children[4].value;
+        const preco = element.children[5].value;
 
         const outdoor = new FormData();
         outdoor.append('dataInicio', dataInicio);
@@ -21,7 +21,9 @@ for (let i = 0; i < btn.length; i++) {
         outdoor.append('recibo', recibo);
         outdoor.append('preco', preco);
 
-        $.ajax({
+        console.log('Sucesso:', element);
+
+       $.ajax({
             url: 'index.php?op=addOutdoor',
             type: 'POST',
             data: outdoor,
@@ -38,8 +40,3 @@ for (let i = 0; i < btn.length; i++) {
         });
     })
 }
-const abrirModalSecundarioBtn = document.getElementById('abrirModalSecundario');
-abrirModalSecundarioBtn.addEventListener('click', function () {
-    var modalSecundario = new bootstrap.Modal(document.getElementById('modalSecundario'));
-    modalSecundario.show();
-});

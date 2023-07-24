@@ -8,18 +8,24 @@
 require_once __DIR__ . '/../services/ClienteService.php';
 require_once __DIR__ . '/../services/UsuarioService.php';
 require_once __DIR__ . '/../services/SolicitacaoService.php';
+require_once __DIR__ . '/../services/OutdoorService.php';
 
 class ClienteController {
 
     private $clienteService = NULL;
     private $solicitacaoService = null;
     private $usuarioService = null;
+    private $outdoorService = null;
 
     public function __construct() {
         $this->clienteService = new ClienteService();
         $this->usuarioService = new UsuarioService();
         $this->solicitacaoService = new SolicitacaoService();
-
+        $this->outdoorService = new OutdoorService();
+        if (isset($_SESSION['Usuario'])) {
+            $Us = unserialize($_SESSION['Usuario']);
+            $_SESSION['Usuario'] = serialize($this->usuarioService->selectById($Us->getId()));
+        }
         if (isset($_POST['action']) && $_POST['action'] === 'ativarcliente' && isset($_POST['idCliente'])) {
             $idCliente = $_POST['idCliente'];
             $this->clienteService->ativarCliente($idCliente);
@@ -99,11 +105,12 @@ class ClienteController {
     }
 
     public function alterarCliente() {
-        if (isset($_SESSION['Cliente']))
+        if (isset($_SESSION['Cliente'])) {
             $Cliente = unserialize($_SESSION['Cliente']);
-        if (isset($_SESSION['Usuario']))
+        }
+        if (isset($_SESSION['Usuario'])) {
             $Usuario = unserialize($_SESSION['Usuario']);
-
+        }
         if (filter_input(INPUT_POST, 'form-alterar-submitted') !== null) {
             $username = filter_input(INPUT_POST, 'userName');
             $senha = filter_input(INPUT_POST, 'senha');
@@ -134,8 +141,9 @@ class ClienteController {
     }
 
     public function solicitarAluguer() {
-        if (isset($_SESSION['Usuario']))
+        if (isset($_SESSION['Usuario'])) {
             $Usuario = unserialize($_SESSION['Usuario']);
+        }
         if (isset($_SESSION['carrinho'])) {
             foreach ($_SESSION['carrinho'] as $key => $value) {
 
@@ -144,10 +152,10 @@ class ClienteController {
 
                 $dataInicio = $value['dataInicio'];
                 $dataFim = $value['dataFim'];
-
                 $dataInicioObj = new DateTime($dataInicio);
                 $dataFimObj = new DateTime($dataFim);
 
+                $dataAtualObj = new DateTime();
                 $intervalo = $dataInicioObj->diff($dataFimObj);
                 $totalDias = $intervalo->days;
                 $totalPagar = $totalDias * $preco;
@@ -155,7 +163,11 @@ class ClienteController {
                 $recibo = $value['recibo'];
                 $confirmar = 0;
                 $outdoor = $value['codOutdoor'];
-
+                if ($recibo == null) {
+                    $this->outdoorService->alterarEstado($id, "A aguardar pagamento");
+                } else {
+                    $this->outdoorService->alterarEstado($id, "Por Validar Pamento");
+                }
                 $idGestor = $this->solicitacaoService->selectGestorPedidos();
                 $this->solicitacaoService->insert($idGestor, $Usuario->getId(), $imagem, $dataInicio, $dataInicio, $totalPagar, $outdoor, $recibo);
             }

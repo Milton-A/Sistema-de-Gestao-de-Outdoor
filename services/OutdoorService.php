@@ -30,9 +30,9 @@ class OutdoorService implements IOutdoorService {
         }
     }
 
-    public function insert($tipo, $preco, $idComuna, $estado, $idGestor) {
+    public function insert($tipo, $preco, $idComuna, $idGestor) {
         if ($tipo != null && $preco != null && $idComuna != null && $idGestor != null) {
-            return $this->outdoorRepository->insert($tipo, $preco, $idComuna, $estado, $idGestor);
+            return $this->outdoorRepository->insert($tipo, $preco, $idComuna, $idGestor);
         } else {
             return false;
         }
