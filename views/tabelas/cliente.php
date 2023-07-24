@@ -36,8 +36,9 @@
                     <td>
                         <?php if ($cada->getEstado() === "Off") { ?>
                             <button class="btn btn-success  btn-sm" id="ativar">Ativar</button>
-                        <?php } else { ?>
+                        <?php } else if ($cada->getEstado() === "ativo") { ?>
                             <button class="btn btn-danger  btn-sm" id="bloquear">Bloquear</button>
+                        <?php } else if ($cada->getEstado() === "bloqueado") { ?>
                             <button class="btn btn-warning btn-sm" id="desbloquear">Desbloquear</button>
                         <?php } ?>
                     </td>
@@ -47,5 +48,4 @@
         </table>
         <button type="button" class="btn btn-primary mt-1" id="nextButton">Ver mais...</button>
     </div>
-
 </div>

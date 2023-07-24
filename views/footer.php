@@ -3,6 +3,7 @@
 </footer>
 <script src="scripts/custom/js/script.js"></script>
 <script src="scripts/custom/js/outdoor.js"></script>
-<script src="scripts/custom/js/scritpProvincia_1.js"></script>
+<script src="scripts/bootstrap/js/bootstrap.min.js"></script> 
+<script src="scripts/custom/js/admScripts.js"></script> 
 </body>
 </html>

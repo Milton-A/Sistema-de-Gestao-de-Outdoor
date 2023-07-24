@@ -42,4 +42,8 @@ class AdministradorService implements IAdministradorService {
     public function selectCount() {
         return $this->admRepository->selectCount();
     }
+    
+    public function selectByIdUsuario($id){
+        return $this->admRepository->selectByIdUsuario($idUsuario);
+    }
 }

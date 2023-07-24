@@ -7,19 +7,28 @@
  */
 require_once __DIR__ . '/../repositories/ClienteRepository.php';
 require_once __DIR__ . '/./IClienteService.php';
+require_once __DIR__ . '/../repositories/SolicitacaoRepository.php';
 
 class ClienteService implements IClienteService {
 
     private $clienteRepository = NULL;
+    private $solicitacoesRepository = null;
 
     public function __construct() {
         $this->clienteRepository = new ClienteRepository();
+        $this->solicitacoesRepository = new SolicitacaoRepository();
     }
 
     public function insertCliente($nomeCompleto, $tipoCliente, $actividadeEmpresa, $comuna, $nacionalidade, $morada, $email, $telemovel, $idUsuario) {
         try {
             if ($this->clienteRepository->insertCliente($nomeCompleto, $tipoCliente, $actividadeEmpresa, $comuna, $nacionalidade, $morada, $email, $telemovel, $idUsuario)) {
-                mail('adrianonovo33@gmail.com', 'Cadastro de novo Usuário', 'O Usuario: precisa de verificação!', 'From: ' . $email);
+
+                $to_email = "adrianonovo33@gmail.com";
+                $subject = "Novo Registro";
+                $body = "Um novo Usuário foi registrado";
+                $headers = "From: $email ";
+
+                mail($to_email, $subject, $body, $headers);
                 return true;
             } else
                 return false;
@@ -78,6 +87,10 @@ class ClienteService implements IClienteService {
 
     public function selectById($id) {
         return $this->clienteRepository->selectById($id);
+    }
+
+    public function consultarSolicitacoes($idCliente) {
+        return $this->solicitacoesRepository->selectAllByIdCliente($idCliente);
     }
 
 }

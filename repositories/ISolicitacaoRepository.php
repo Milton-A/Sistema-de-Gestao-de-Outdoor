@@ -20,4 +20,5 @@ interface ISolicitacaoRepository {
     public function update($idSolicitacao, $idGestor);
     public function validarRecibo($idSolicitacao);
     public function carregarRecibo($idSolicitacao, $recibo);
+    public function selectAllByIdCliente($idCliente);
 }

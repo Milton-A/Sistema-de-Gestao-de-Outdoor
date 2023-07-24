@@ -46,5 +46,13 @@ class GestorService implements IGestorService {
     public function getTotal(){
         return $this->gestorRepository->selectCount();
     }
+    
+    public function selectByIdUsuario($id){
+        return $this->gestorRepository->selectByIdUsuario($id);
+    }
+    
+    public function selectById($id) {
+        return $this->gestorRepository->selectById($id);
+    }
 
 }

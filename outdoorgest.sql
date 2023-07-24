@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 22/07/2023 às 15:04
+-- Tempo de geração: 24/07/2023 às 05:59
 -- Versão do servidor: 10.4.28-MariaDB
 -- Versão do PHP: 8.2.4
 
@@ -40,7 +40,7 @@ CREATE TABLE `administrador` (
 --
 
 INSERT INTO `administrador` (`id`, `nome`, `email`, `idUsuario`, `idComuna`) VALUES
-(1, 'Root Master', 'root@gmail.com', 1, 193);
+(1, 'Root Master', 'rota@gmail.com', 1, 193);
 
 -- --------------------------------------------------------
 
@@ -635,7 +635,10 @@ CREATE TABLE `gestor` (
 --
 
 INSERT INTO `gestor` (`id`, `nome`, `email`, `idComuna`, `morada`, `telemovel`, `idUsuario`, `idAdm`, `estado`) VALUES
-(1, 'Gestor', 'gestor@gmail.com', 155, 'rua 21', 924588675, 7, 1, 'off');
+(1, 'Gestor', 'gestor@gmail.com', 155, 'rua 21', 924588675, 7, 1, 'on'),
+(2, 'Gestor2', 'gestor2@gmail.com', 36, 'lskjdksld jsndnsk', 92956651, 9, 1, 'on'),
+(3, 'Gestor3', 'gestor3@gmail.com', 193, 'Ruas 122', 95632653, 10, 1, 'off'),
+(4, 'Gestor4', 'gestor4@gmai.com', 201, 'rua 23', 924588675, 11, 1, 'on');
 
 -- --------------------------------------------------------
 
@@ -838,11 +841,11 @@ CREATE TABLE `outdoor` (
 --
 
 INSERT INTO `outdoor` (`id`, `tipo`, `preco`, `idComuna`, `estado`, `eliminado`, `idUsuario`) VALUES
-(1, 'Paineis Luminosos', 5000, 248, 'Disponivel', 'nao', 7),
-(2, 'Paineis Não Luminosos', 20000, 155, 'A aguardar pagamento', 'nao', 7),
-(3, 'Faixadas', 5000, 155, 'Disponivel', 'nao', 7),
-(4, 'Placas \r\nIndicativas', 5000, 155, 'Disponivel', 'nao', 7),
-(5, 'Lampoles', 5000, 155, 'Disponivel', 'nao', 7);
+(1, 'Paineis Luminosos', 5000, 53, 'Por Validar Pagamento', 'nao', 7),
+(2, 'Paineis Não Luminosos', 20000, 155, 'Por Validar Pagamento', 'nao', 7),
+(3, 'Faixadas', 5000, 155, 'Por Validar Pagamento', 'nao', 7),
+(4, 'Placas \r\nIndicativas', 5000, 155, 'Ocupado', 'nao', 7),
+(5, 'Lampoles', 5000, 155, 'Por Validar Pagamento', 'nao', 7);
 
 -- --------------------------------------------------------
 
@@ -854,14 +857,14 @@ CREATE TABLE `pedidos` (
   `id` int(11) NOT NULL,
   `idGestor` int(11) NOT NULL,
   `idCliente` int(11) NOT NULL,
-  `imagem` blob DEFAULT NULL,
+  `imagem` varchar(100) DEFAULT NULL,
   `dataInicio` date NOT NULL,
   `dataFim` date NOT NULL,
   `total` double NOT NULL,
   `idOutdoor` int(11) NOT NULL,
   `eliminado` varchar(10) NOT NULL DEFAULT 'nao',
-  `estado` varchar(15) NOT NULL DEFAULT 'nao aprovado',
-  `recibo` longblob DEFAULT NULL
+  `estado` varchar(50) NOT NULL DEFAULT 'nao aprovado',
+  `recibo` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -869,7 +872,11 @@ CREATE TABLE `pedidos` (
 --
 
 INSERT INTO `pedidos` (`id`, `idGestor`, `idCliente`, `imagem`, `dataInicio`, `dataFim`, `total`, `idOutdoor`, `eliminado`, `estado`, `recibo`) VALUES
-(1, 7, 5, NULL, '2023-07-01', '2023-07-31', 15000, 3, 'nao', 'nao aprovado', NULL);
+(1, 7, 5, NULL, '2023-07-01', '2023-07-31', 15000, 3, 'nao', 'nao aprovado', NULL),
+(2, 9, 6, NULL, '2023-07-03', '2023-07-28', 1000, 4, 'nao', 'aprovado', 'http://localhost/gestOutdoor/content/comprovativo/64bd57cf0359c_outdoorgest.pdf'),
+(3, 11, 5, NULL, '2023-07-04', '2023-07-26', 10000, 5, 'nao', 'nao aprovado', NULL),
+(4, 10, 5, 'http://localhost/gestOutdoor/content/images/64bd57cf03334_DER.png', '2023-07-13', '2023-07-13', 35000, 3, 'nao', 'nao aprovado', 'http://localhost/gestOutdoor/content/comprovativo/64bd57cf0359c_outdoorgest.pdf'),
+(5, 10, 5, 'http://localhost/gestOutdoor/content/images/64bd57e87f952_Diagrama de Classes.png', '2023-07-13', '2023-07-13', 100000, 2, 'nao', 'nao aprovado', 'http://localhost/gestOutdoor/content/comprovativo/64bd57e87fba0_outdoorgest.pdf');
 
 -- --------------------------------------------------------
 
@@ -928,7 +935,10 @@ INSERT INTO `usuario` (`id`, `username`, `senha`, `tipo`, `eliminado`) VALUES
 (1, 'root', 'root', 'Administrador', 'nao'),
 (5, 'jota', '123', 'Cliente', 'nao'),
 (6, 'cascata', '123', 'Cliente', 'nao'),
-(7, 'gestor', '123', 'Gestor', 'nao');
+(7, 'gestor', '123', 'Gestor', 'nao'),
+(9, 'gestor2', '123', 'Gestor', 'nao'),
+(10, 'gestor3', '123', 'Gestor', 'nao'),
+(11, 'gestor4', '123', 'Gestor', 'nao');
 
 --
 -- Índices para tabelas despejadas
@@ -1029,7 +1039,7 @@ ALTER TABLE `comuna`
 -- AUTO_INCREMENT de tabela `gestor`
 --
 ALTER TABLE `gestor`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de tabela `municipio`
@@ -1047,7 +1057,7 @@ ALTER TABLE `outdoor`
 -- AUTO_INCREMENT de tabela `pedidos`
 --
 ALTER TABLE `pedidos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de tabela `provincia`
@@ -1059,7 +1069,7 @@ ALTER TABLE `provincia`
 -- AUTO_INCREMENT de tabela `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- Restrições para tabelas despejadas

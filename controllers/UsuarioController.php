@@ -7,6 +7,8 @@
  */
 require_once __DIR__ . '/../services/UsuarioService.php';
 require_once __DIR__ . '/../services/ClienteService.php';
+require_once __DIR__ . '/../services/GestorService.php';
+require_once __DIR__ . '/../services/AdministradorService.php';
 
 class UsuarioController {
 
@@ -14,10 +16,14 @@ class UsuarioController {
 
     private $usuarioService = null;
     private $clienteService = null;
+    private $gestorService = null;
+    private $administradorService = null;
 
     public function __construct() {
         $this->usuarioService = new UsuarioService();
         $this->clienteService = new ClienteService();
+        $this->administradorService = new AdministradorService();
+        $this->gestorService = new GestorService();
     }
 
     public function requesHandler() {
@@ -46,17 +52,34 @@ class UsuarioController {
                 echo "<script>alert('Por favor, preencha todos os campos!');</script>";
             } else {
                 $usuario = $this->usuarioService->login($username, $senha);
+
                 if ($usuario != false) {
+
                     $_SESSION['loggedin'] = true;
                     $_SESSION['Usuario'] = serialize($usuario);
-                    $_SESSION['Cliente'] = serialize($this->clienteService->selectByIdUsuario($usuario->getId()));
 
                     if ($usuario->getTipo() == 'Cliente') {
+                        
+                        $Cliente = $this->clienteService->selectByIdUsuario($usuario->getId());
+                        $_SESSION['Cliente'] = serialize($Cliente);
                         $this->redirect('index.php?op=Cliente');
+                        
                     } else if ($usuario->getTipo() == 'Gestor') {
-                        $this->redirect('index.php?op=Gestor');
+                        
+                        $Cliente = $this->gestorService->selectByIdUsuario($usuario->getId());
+                        $_SESSION['Cliente'] = serialize($Cliente);
+                        
+                        if ($this->gestorService->isFirstLogin($Cliente->getId()))
+                            $this->redirect('index.php?op=Gestor&&request=firstLogin');
+                        else
+                            $this->redirect('index.php?op=Gestor&&estado=all');
+                        
                     } else if ($usuario->getTipo() == "Administrador") {
+                        
+                        $Cliente = $this->administradorService->selectByIdUsuario($usuario->getId());
+                        $_SESSION['Cliente'] = serialize($Cliente);
                         $this->redirect('index.php?op=Administrador');
+                        
                     }
                 } else {
                     echo "<script>alert('Username ou Senha incorreta!');</script>";

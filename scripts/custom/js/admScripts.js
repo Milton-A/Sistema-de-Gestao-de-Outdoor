@@ -44,6 +44,27 @@ $(document).ready(function () {
         });
     });
 
+    $(document).on('click', '#listarDados #alterarGestor', function () {
+        $('#alterarGestorModal').modal('show');
+    });
+    
+    $(document).on('click', '#idge #enviarId', function () {
+        var idPedido = document.getElementById("novoId");
+        
+        console.log(idPedido);
+        
+       /* $.ajax({
+            url: 'controllers/SolicitacaoController.php',
+            type: 'POST',
+            data: {
+                action: 'alterarGestor',
+                idPedido: idPedido
+            },
+            success: function (response) {
+            }
+        });*/
+    });
+
     $(document).on('click', '#verGestores', function () {
         $.ajax({
             url: 'controllers/gestorController.php',
@@ -59,7 +80,6 @@ $(document).ready(function () {
             type: "POST",
             url: "controllers/clienteController.php",
             success: function (response) {
-                // Atualiza o conteúdo do elemento HTML com os municípios correspondentes
                 $('#listarDados').append(response);
             }
         });
@@ -69,7 +89,6 @@ $(document).ready(function () {
             type: "POST",
             url: "controllers/gestorController.php",
             success: function (response) {
-                // Atualiza o conteúdo do elemento HTML com os municípios correspondentes
                 $('#listarDados').append(response);
             }
         });
@@ -83,9 +102,25 @@ $(document).ready(function () {
 
         $('#nextButton').click(function () {
             $('#listarDados tr').hide();
-            console.log("TESTES");
             startIndex += elementsPerPage;
             $('#listarDados tr').slice(startIndex, startIndex + elementsPerPage).show();
+        });
+    });
+    $(document).ready(function () {
+        $('.dropdown-item.alterar-email').on('click', function () {
+            $('#alterarEmailModal').modal('show');
+        });
+    });
+    
+    $(document).ready(function () {
+        $('.dro.verCarrinho').on('click', function () {
+            $('#verCarrinhoModal').modal('show');
+        });
+    });
+    
+     $(document).ready(function () {
+        $('.dro.verSolicitacao').on('click', function () {
+            $('#verSolicitacaoModal').modal('show');
         });
     });
 });

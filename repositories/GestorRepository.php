@@ -20,7 +20,7 @@ class GestorRepository implements IGestorRepository {
 
     public function insert($nome, $email, $idComuna, $morada, $telemovel, $idUsuario, $idAdm) {
         try {
-            $stmt = $this->db->prepare("INSERT INTO `gestor`(`id`, `nome`, `email`, `idComuna`, `morada`, `telemovel`, `idUsuario`, `idAdm`) "
+            $stmt = $this->db->prepare("INSERT INTO `gestor`(`nome`, `email`, `idComuna`, `morada`, `telemovel`, `idUsuario`, `idAdm`) "
                     . "VALUES (:nome,:email,:idComuna,:morada,:telemovel,:idUsuario,:idAdm)");
             $stmt->bindParam(":nome", $nome);
             $stmt->bindParam(":email", $email);
@@ -38,26 +38,57 @@ class GestorRepository implements IGestorRepository {
     }
 
     public function selectById($id) {
-        $stmt = $this->db->prepare("SELECT * FROM gestor where gestor.idGestor = :id ");
+        $stmt = $this->db->prepare("SELECT * FROM gestor where id= :id ");
         $stmt->bindparam(":id", $id);
         $stmt->execute();
-        $gestor = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if ($gestor != null) {
-            return $gestor;
+        $userData = $stmt->fetch(PDO::FETCH_ASSOC);
+        $user = new GestorModel(
+                    $userData['id'],
+                    $userData['nome'],
+                    $userData['email'],
+                    $userData['idComuna'],
+                    $userData['morada'],
+                    $userData['telemovel'],
+                    $userData['username'],
+                    $userData['estado']
+            );
+        if ($user != null) {
+            return $user;
         } else {
             return false;
         }
     }
-
+    
+    public function selectByIdUsuario($id) {
+        $stmt = $this->db->prepare("SELECT * FROM gestor where idUsuario= :id ");
+        $stmt->bindparam(":id", $id);
+        $stmt->execute();
+        $userData = $stmt->fetch(PDO::FETCH_ASSOC);
+        $user = new GestorModel(
+                    $userData['id'],
+                    $userData['nome'],
+                    $userData['email'],
+                    $userData['idComuna'],
+                    $userData['morada'],
+                    $userData['telemovel'],
+                    $userData['username'],
+                    $userData['estado']
+            );
+        if ($user != null) {
+            return $user;
+        } else {
+            return false;
+        }
+    }
+    
     public function isFirstLogin($id) {
         $stmt = $this->db->prepare("SELECT `estado` FROM `gestor` WHERE id = :id");
         $stmt->bindparam(":id", $id);
         $stmt->execute();
         $gestor = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if ($gestor != null) {
-            return $gestor['estado'];
+        
+        if ($gestor['estado'] == "off") {
+            return true;
         } else {
             return false;
         }
@@ -84,6 +115,27 @@ class GestorRepository implements IGestorRepository {
         return $users;
     }
     
+    public function selectAllIdUser() {
+        $stmt = $this->db->prepare("SELECT g.id, `nome`, `email`, `idComuna`, `morada`, `telemovel`, idUsuario, `estado` FROM gestor g join usuario u on u.id = g.idUsuario where u.eliminado <> 'sim'");
+        $stmt->execute();
+        $usersData = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $users = [];
+        foreach ($usersData as $userData) {
+            $user = new GestorModel(
+                    $userData['id'],
+                    $userData['nome'],
+                    $userData['email'],
+                    $userData['idComuna'],
+                    $userData['morada'],
+                    $userData['telemovel'],
+                    $userData['idUsuario'],
+                    $userData['estado']
+            );
+            $users[] = $user;
+        }
+        return $users;
+    }
+    
     public function update($id,$nome, $email, $idComuna, $morada, $telemovel) {
         try {
             $stmt = $this->db->prepare("UPDATE gestor SET nome = :nome, email = :email, idComuna = :idComuna, morada = :morada, telemovel = :telemovel WHERE id = :id");
@@ -103,7 +155,7 @@ class GestorRepository implements IGestorRepository {
     
     public function alterarEstado($id, $estado) {
         try {
-            $stmt = $this->db->prepare("UPDATE `gestor` SET `estado`=:estado WHERE idGestor = :id");
+            $stmt = $this->db->prepare("UPDATE `gestor` SET `estado`=:estado WHERE idUsuario = :id");
             $stmt->bindParam(":id", $id);
             $stmt->bindParam(":estado", $estado);
             $stmt->execute();

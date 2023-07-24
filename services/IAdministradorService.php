@@ -21,4 +21,6 @@ interface IAdministradorService {
     public function verTotalAdministradores();
 
     public function selectCount();
+    
+    public function selectByIdUsuario($id);
 }

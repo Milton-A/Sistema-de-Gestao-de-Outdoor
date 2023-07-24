@@ -12,4 +12,8 @@ interface IClienteService {
     public function desbloquearCliente($id);
     public function ativarCliente($id);
     public function showClientes();
+    public function getTotalClientes() ;
+    public function selectByIdUsuario($id);
+     public function selectById($id);
+      public function consultarSolicitacoes($id);
 }

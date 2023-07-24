@@ -16,4 +16,6 @@ interface IGestorService {
     public function alterarGestor($id, $nome, $email, $idComuna, $morada, $telemovel);
     public function alterarEstado($id);
     public function verGestores();
+    public function selectByIdUsuario($id);
+    public function selectById($id);
 }

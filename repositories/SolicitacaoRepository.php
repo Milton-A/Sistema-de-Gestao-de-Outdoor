@@ -37,15 +37,10 @@ class SolicitacaoRepository implements ISolicitacaoRepository {
 
     public function selectGestorPedidos() {
         try {
-            $stmt = $this->db->prepare("SELECT idGestor, COUNT(*) AS num_pedidos FROM pedidos GROUP BY idGestor ORDER BY num_pedidos LIMIT 1;");
+            $stmt = $this->db->prepare("SELECT g.id, g.idUsuario, COUNT(p.idGestor) AS numero_de_pedidos FROM gestor g LEFT JOIN pedidos p ON g.idUsuario = p.idGestor AND p.estado <> 'aprovado' GROUP BY g.id, g.idUsuario ORDER BY numero_de_pedidos ASC");
             $stmt->execute();
-            $result = $stmt->fetch(PDO::FETCH_ASSOC);
-
-            if ($result['num_pedidos'] === 1) {
-                return $result['idGestor'];
-            } else {
-                return true;
-            }
+            $outdoors = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $outdoors;
         } catch (PDOException $e) {
             echo $e->getMessage();
             return false;
@@ -68,6 +63,23 @@ class SolicitacaoRepository implements ISolicitacaoRepository {
         }
     }
     
+    public function selectAllByIdCliente($idCliente) {
+        try {
+            $stmt = $this->db->prepare("SELECT p.id, u.username `gestor`, `imagem`, `dataInicio`, `dataFim`, `total`, o.tipo `idOutdoor`, p.eliminado, p.estado as estadoPedido, o.estado estadoOutdoor, `recibo` FROM pedidos p join usuario u on u.id = p.idGestor join outdoor o on o.id = p.idOutdoor where p.idCliente = :id and p.estado <> 'terminado'");
+            $stmt->bindParam(":id", $idCliente);
+            $stmt->execute();
+            $outdoors = $stmt->fetchAll();
+            $listaOutdoor = array();
+            foreach ($outdoors as $cada) {
+                $listaOutdoor[] = new SolicitacaoModel($cada['id'], $cada['gestor'], $cada['imagem'], $cada['dataInicio'], $cada['dataFim'], $cada['total'], $cada['idOutdoor'], $cada['eliminado'], $cada['estadoPedido'], $cada['estadoOutdoor'], $cada['recibo']);
+            }
+            return $listaOutdoor;
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+            return false;
+        }
+    }
+
     public function selectAllEmEspera() {
         try {
             $stmt = $this->db->prepare("SELECT o.id, o.tipo, `preco`, `idComuna`, `estado`, o.eliminado, u.username `idUsuario`  FROM outdoor o join usuario u  on u.id = o.idUsuario join comuna c on c.id = o.idComuna where p.eliminado <> 'sim' and o.estado = 'A aguardar pagamento'");
@@ -99,7 +111,7 @@ class SolicitacaoRepository implements ISolicitacaoRepository {
 
     public function insert($idGestor, $idCliente, $imagem, $dataInicio, $dataFim, $totalPagar, $idOutdoor, $recibo) {
         try {
-            $stmt = $this->db->prepare("INSERT INTO `pedidos`(`idGestor`, `idCliente`, `imagem`, `dataInicio`, `dataFim`, `total`, `idOutdoor`, `recibo`) "
+            $stmt = $this->db->prepare("INSERT INTO `pedidos`(`idGestor`, `idCliente`, `imagem`, `dataInicio`, `dataFim`, `total`, `idOutdoor`, `recibo`)"
                     . "VALUES (:idGestor,:idCliente,:imagem, :dataInicio,:dataFim,:total,:idOutdoor, :recibo)");
             $stmt->bindParam(":idGestor", $idGestor);
             $stmt->bindParam(":idCliente", $idCliente);

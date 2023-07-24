@@ -18,7 +18,7 @@ interface ISolicitacaoService {
     public function selectAllOcupado();
     public function selectAllPorValidar();
     public function selectAllEmEspera();
-    public function aprovar($estado, $id);
+    public function aprovar($estado,$id);
     public function insert($idGestor, $idCliente, $imagem, $dataInicio, $dataFim, $totalPagar, $idOutdoor, $recibo);
     public function update($idSolicitacao, $idGestor);
     public function validarRecibo($idSolicitacao);

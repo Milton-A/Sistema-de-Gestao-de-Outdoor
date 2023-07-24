@@ -15,4 +15,5 @@ interface IAdministradorRepository {
     public function selectAll();
     public function selectCount();
     public function update($id, $email);
+    public function selectByIdUsuario($idUsuario);
 }

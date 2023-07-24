@@ -20,4 +20,8 @@ interface IGestorRepository {
     public function alterarEstado($id, $estado);
 
     public function selectCount();
+
+    public function selectByIdUsuario($id);
+    
+    public function selectAllIdUser();
 }

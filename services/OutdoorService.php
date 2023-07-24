@@ -53,5 +53,13 @@ class OutdoorService implements IOutdoorService {
             return false;
         }
     }
+    
+    public function selectOutdoorByIdPedido($id) {
+        return $this->outdoorRepository->selectByIdPedido($id);
+    }
+    
+    public function alterarEstado($id, $estado){
+        return $this->outdoorRepository->updateEstado($id, $estado);
+    }
 
 }

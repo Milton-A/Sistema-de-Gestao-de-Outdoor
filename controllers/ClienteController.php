@@ -34,6 +34,10 @@ class ClienteController {
         }
     }
 
+    public function verCarrinho() {
+        include __DIR__ . '/../views/cart.php';
+    }
+
     public function requesHandler() {
         $op = filter_input(INPUT_GET, 'request');
         $action = isset($op) ? $op : NULL;
@@ -79,6 +83,7 @@ class ClienteController {
 
                 if ($idUsuario) {
                     $response = $this->clienteService->insertCliente($nomeCompleto, $tipoCliente, $actividadeEmpresa, $comuna, $nacionalidade, $morada, $email, $telemovel, $idUsuario);
+
                     if ($response) {
                         echo "<script>alert('Registrado com Sucesso!');</script>";
                         $this->redirect("index.php?op=login");
@@ -111,7 +116,7 @@ class ClienteController {
 
             $retorno = $this->usuarioService->alterarUsuario($Usuario->getId(), $username, $senha);
             $_SESSION['Usuario'] = serialize($this->usuarioService->selectById($Usuario->getId()));
-            
+
             if ($retorno) {
                 $response = $this->clienteService->alterarUtilizador($Cliente->getId(), $nomeCompleto, $comuna, $nacionalidade, $morada, $email, $telemovel);
                 if ($response) {
@@ -129,15 +134,40 @@ class ClienteController {
     }
 
     public function solicitarAluguer() {
-        
+        if (isset($_SESSION['Usuario']))
+            $Usuario = unserialize($_SESSION['Usuario']);
+        if (isset($_SESSION['carrinho'])) {
+            foreach ($_SESSION['carrinho'] as $key => $value) {
+
+                $imagem = (string) $value['imagem'];
+                $preco = $value['preco'];
+
+                $dataInicio = $value['dataInicio'];
+                $dataFim = $value['dataFim'];
+
+                $dataInicioObj = new DateTime($dataInicio);
+                $dataFimObj = new DateTime($dataFim);
+
+                $intervalo = $dataInicioObj->diff($dataFimObj);
+                $totalDias = $intervalo->days;
+                $totalPagar = $totalDias * $preco;
+
+                $recibo = $value['recibo'];
+                $confirmar = 0;
+                $outdoor = $value['codOutdoor'];
+
+                $idGestor = $this->solicitacaoService->selectGestorPedidos();
+                $this->solicitacaoService->insert($idGestor, $Usuario->getId(), $imagem, $dataInicio, $dataInicio, $totalPagar, $outdoor, $recibo);
+            }
+        }
     }
 
     public function carregarComprovativo() {
-        
+        $this->solicitacaoService->carregarRecibo($idSolicitacao, $recibo);
     }
 
-    public function consultarSolicitacoes() {
-        
+    public function consultarSolicitacoes($idCliente) {
+        return $this->clienteService->consultarSolicitacoes($idCliente);
     }
 
 }

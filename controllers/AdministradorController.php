@@ -15,6 +15,7 @@ require_once __DIR__ . '/../services/GestorService.php';
 require_once __DIR__ . '/../services/ClienteService.php';
 require_once __DIR__ . '/../services/OutdoorService.php';
 require_once __DIR__ . '/../services/SolicitacaoService.php';
+require_once __DIR__ . '/../services/UsuarioService.php';
 
 class AdministradorController {
 
@@ -24,6 +25,7 @@ class AdministradorController {
     private $clienteService = null;
     private $outdoorService = null;
     private $solicitacoesService = null;
+    private $usuarioService = null;
 
     public function __construct() {
         $this->admService = new AdministradorService();
@@ -31,6 +33,7 @@ class AdministradorController {
         $this->clienteService = new ClienteService();
         $this->outdoorService = new OutdoorService();
         $this->solicitacoesService = new SolicitacaoService();
+        $this->usuarioService = new UsuarioService();
     }
 
     public function requesHandler() {
@@ -78,26 +81,36 @@ class AdministradorController {
     }
 
     public function showCadastrarGestorPage() {
-         if (filter_input(INPUT_POST, 'form-criarGestor-submitted') !== null) {
+        $this->alterarEmail();
+        $usuario = unserialize($_SESSION['Usuario']);
+
+        if (filter_input(INPUT_POST, 'form-criarGestor-submitted') !== null) {
             $username = filter_input(INPUT_POST, 'userName');
             $senha = filter_input(INPUT_POST, 'senha');
-            $tipo = "Cliente";
             $nomeCompleto = filter_input(INPUT_POST, 'nome');
+            $tipo = 'Gestor';
             $comuna = filter_input(INPUT_POST, 'Comuna');
             $nacionalidade = filter_input(INPUT_POST, 'nacionalidade');
             $morada = filter_input(INPUT_POST, 'morada');
             $email = filter_input(INPUT_POST, 'email');
             $telemovel = filter_input(INPUT_POST, 'telefone');
 
-            if ($username == null || $senha == null || $tipoCliente == null || $nomeCompleto == null || $comuna == null || $nacionalidade == null || $morada == null || $email == null) {
+            if ($username == null || $senha == null || $nomeCompleto == null || $comuna == null || $nacionalidade == null || $morada == null || $email == null) {
                 echo "<script>alert('Por favor, preencha todos os campos!');</script>";
             } else {
                 $response = false;
                 $idUsuario = $this->usuarioService->criarUsuario($username, $tipo, $senha);
 
                 if ($idUsuario) {
-                    $response = $this->gestorService->inserirGestor($nomeCompleto, $email, $comuna, $morada, $telemovel, $idUsuario, $idAdm);
+                    $response = $this->gestorService->inserirGestor($nomeCompleto, $email, $comuna, $morada, $telemovel, $idUsuario, $usuario->getId());
                     if ($response) {
+                        $to_email = "$email";
+                        $subject = "Dados de Login";
+                        $body = "Dados de Login (Username: $username && Senha: $senha)! Deverá alterar os dados para poder acessar o sistema";
+                        $headers = "From: suporte@GestoaOutdoor.com";
+
+                        mail($to_email, $subject, $body);
+
                         echo "<script>alert('Registrado com Sucesso!');</script>";
                     } else {
                         echo "<script>alert('[Falha] Não Registrado!');</script>";
@@ -110,19 +123,37 @@ class AdministradorController {
         include __DIR__ . '/../views/registro/registroView.php';
     }
 
+    public function alterarEmail() {
+        $usuario = unserialize($_SESSION['Usuario']);
+        if (filter_input(INPUT_POST, 'savarEmail') !== null) {
+            $novoEmail = filter_input(INPUT_POST, 'novoEmail');
+            if ($novoEmail == null) {
+                echo "<script>alert('Por favor, preencha todos os campos!');</script>";
+            } else {
+                if (!$this->admService->alterarEmail($usuario->getId(), $novoEmail)) {
+                    echo "<script>alert('[Falha] Não Registrado!');</script>";
+                }
+            }
+        }
+    }
+
     public function showAdmPage() {
+        $this->alterarEmail();
         include __DIR__ . '/../views/administrador/administradorView.php';
     }
 
     public function showGestoresPage() {
+         $this->alterarEmail();
         include __DIR__ . '/../views/administrador/administradorViewGestor.php';
     }
 
     public function showOutdoorPage() {
+         $this->alterarEmail();
         include __DIR__ . '/../views/administrador/administradorViewOutdoors.php';
     }
 
     public function showSolicitacoesPage() {
+         $this->alterarEmail();
         include __DIR__ . '/../views/administrador/administradorViewOutdoorsPedidos.php';
     }
 
@@ -140,22 +171,6 @@ class AdministradorController {
 
     public function verTotalAdministradores() {
         return $this->admService->selectCount();
-    }
-
-    public function ativarContas() {
-        
-    }
-
-    public function bloquearContas() {
-        
-    }
-
-    public function alterarEmail() {
-        
-    }
-
-    public function alterarGestorSolicitacao() {
-        
     }
 
 }

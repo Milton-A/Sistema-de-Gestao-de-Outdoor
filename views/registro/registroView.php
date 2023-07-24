@@ -42,33 +42,33 @@ if ($logado) {
                                         <form method="post" class="d-flex flex-column mb-3">
                                             <div class="form-group">
                                                 <label class="form-label">Nome</label>
-                                                <input type="text" class="form-control" name="nome" placeholder="Nome" value="<?php
-                                                if ($logado) {
-                                                    echo $cliente->getNomeCompleto();
+                                                <input type="text" class="form-control" name="nome" placeholder="Nome" <?php
+                                                if ($logado && $usuario->getTipo() != "Administrador") {
+                                                    echo ' value="'. $cliente->getNomeCompleto().'"';
                                                 }
-                                                ?>">
+                                                ?>>
                                             </div>
                                             <div class="form-group">
                                                 <label class="form-label">Email</label>
-                                                <input type="email" class="form-control" name="email" id="emailInput" placeholder="Email" value="<?php if ($logado) echo $cliente->getEmail(); ?>">
+                                                <input type="email" class="form-control" name="email" id="emailInput" placeholder="Email" value="<?php if ($logado && $usuario->getTipo() != "Administrador")  echo $cliente->getEmail(); ?>">
                                             </div>
                                             <div class="form-group">
                                                 <label class="form-label">Confirmar Email</label>
-                                                <input type="email" class="form-control" name="confirmarEmail" id="confirmarEmailInput" placeholder="Confirmar Email" value="<?php if ($logado) echo $cliente->getEmail(); ?>">
+                                                <input type="email" class="form-control" name="confirmarEmail" id="confirmarEmailInput" placeholder="Confirmar Email" value="<?php if ($logado && $usuario->getTipo() != "Administrador")  echo $cliente->getEmail(); ?>">
                                                 <small id="emailMismatchMessage" class="text-danger d-none">Os endereços de email não correspondem</small>
                                             </div>
                                             <div class="form-group">
                                                 <label class="form-label">Telefone</label>
-                                                <input type="text" class="form-control" name="telefone" placeholder="Telefone" value="<?php if ($logado) echo $cliente->getTelemovel(); ?>">
+                                                <input type="text" class="form-control" name="telefone" placeholder="Telefone" value="<?php if ($logado && $usuario->getTipo() != "Administrador")  echo $cliente->getTelemovel(); ?>">
                                             </div>
                                             <hr>
                                             <div class="form-group">
                                                 <label class="form-label">Morada</label>
-                                                <input type="text" class="form-control" name="morada" placeholder="rua 5, casa S Nº 25, maianga" value="<?php if ($logado) echo $cliente->getMorada(); ?>">
+                                                <input type="text" class="form-control" name="morada" placeholder="rua 5, casa S Nº 25, maianga" value="<?php if ($logado && $usuario->getTipo() != "Administrador")  echo $cliente->getMorada(); ?>">
                                             </div>
                                             <div class="form-group">
                                                 <label class="form-label">Nacionalidade</label>
-                                                <input type="text" class="form-control" name="nacionalidade" placeholder="Nacionalidade" value="<?php if ($logado) echo $cliente->getNacionalidade(); ?>">
+                                                <input type="text" class="form-control" name="nacionalidade" placeholder="Nacionalidade" value="<?php if ($logado && $usuario->getTipo() != "Administrador")  echo $cliente->getNacionalidade(); ?>">
                                             </div>
                                             <div class="form-group d-flex justify-content-between">
                                                 <?php
@@ -129,7 +129,7 @@ if ($logado) {
                                             ?>
                                             <div class="form-group">
                                                 <label class="form-label">Username</label>
-                                                <input type="text" class="form-control" name="userName" placeholder="Username" value="<?php if ($logado) echo $usuario->getUsername(); ?>">
+                                                <input type="text" class="form-control" name="userName" placeholder="Username" value="<?php if ($logado && $usuario->getTipo() != "Administrador") echo $usuario->getUsername(); ?>">
                                             </div>
                                             <div class="form-group">
                                                 <label class="form-label">Senha</label>
@@ -143,17 +143,22 @@ if ($logado) {
                                             <div class="form-group text-center">
                                                 <button type="submit" class="btn btn-primary" name="btn-save">
                                                     <?php
-                                                    if ($logado)
-                                                        echo "AlterarDados";
-                                                    else
+                                                    if ($logado) {
+                                                        if ($usuario->getTipo() == "Administrador") {
+                                                            echo "Registrar Gestor";
+                                                        } else {
+                                                            echo "AlterarDados";
+                                                        }
+                                                    } else {
                                                         echo "Criar Conta";
+                                                    }
                                                     ?>
                                                 </button>
                                                 <?php
                                                 if ($logado) {
                                                     if ($usuario->getTipo() == "Administrador") {
                                                         echo '<input type="hidden" name="form-criarGestor-submitted" value="1" />';
-                                                    }else{
+                                                    } else {
                                                         echo '<input type="hidden" name="form-alterar-submitted" value="1" />';
                                                     }
                                                 } else

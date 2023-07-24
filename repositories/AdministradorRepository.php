@@ -10,19 +10,19 @@
  *
  * @author Milton Dantas
  */
-
 require_once __DIR__ . '/./IAdministradorRepository.php';
 require_once __DIR__ . '/../dbconfig/DbConnection.php';
 require_once __DIR__ . '/../models/AdministradorModel.php';
 
-class AdministradorRepository  implements IAdministradorRepository{
+class AdministradorRepository implements IAdministradorRepository {
+
     //put your code here
     private $db = null;
 
     public function __construct() {
         $this->db = DbConnection::getInstance();
     }
-    
+
     public function insert($nome, $email) {
         try {
             $stmt = $this->db->prepare("INSERT INTO `administrador`(`nome`,`email`) VALUES (:nome, :email)");
@@ -35,7 +35,7 @@ class AdministradorRepository  implements IAdministradorRepository{
             return false;
         }
     }
-    
+
     public function selectAll() {
         try {
             $stmt = $this->db->prepare("SELECT a.id, a.nome, `email`, u.username, c.nome as comuna FROM administrador a join comuna c on c.id=a.idComuna join usuario u on u.id = a.idUsuario");
@@ -58,7 +58,32 @@ class AdministradorRepository  implements IAdministradorRepository{
             return false;
         }
     }
-    
+
+    public function selectByIdUsuario($idUsuario) {
+        try {
+            $stmt = $this->db->prepare("SELECT a.id, a.nome, `email`, u.username, c.nome as comuna FROM administrador a join comuna c on c.id=a.idComuna join usuario u on u.id = a.idUsuario  where u.id = :id");
+            $stmt->bindparam(":id", $idUsuario);
+            $stmt->execute();
+            $usersData = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $user = new AdministradorModel(
+                    $userData['id'],
+                    $userData['nome'],
+                    $userData['email'],
+                    $userData['username'],
+                    $userData['comuna'],
+            );
+
+            if ($user != null) {
+                return $user;
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+            return false;
+        }
+    }
+
     public function selectCount() {
         try {
             $stmt = $this->db->prepare("SELECT COUNT(*) FROM `administrador` join usuario u on u.id=administrador.idUsuario where u.eliminado <> 'sim'");
@@ -70,10 +95,10 @@ class AdministradorRepository  implements IAdministradorRepository{
             return false;
         }
     }
-    
+
     public function update($id, $email) {
         try {
-            $stmt = $this->db->prepare("UPDATE administrador SET email = :email WHERE id = :id");
+            $stmt = $this->db->prepare("UPDATE administrador SET email = :email WHERE idUsuario = :id");
             $stmt->bindParam(":id", $id);
             $stmt->bindParam(":email", $email);
             $stmt->execute();
@@ -83,4 +108,5 @@ class AdministradorRepository  implements IAdministradorRepository{
             return false;
         }
     }
+
 }
