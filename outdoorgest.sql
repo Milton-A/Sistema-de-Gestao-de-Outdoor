@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 24/07/2023 às 05:59
+-- Tempo de geração: 24/07/2023 às 07:56
 -- Versão do servidor: 10.4.28-MariaDB
 -- Versão do PHP: 8.2.4
 
@@ -40,7 +40,7 @@ CREATE TABLE `administrador` (
 --
 
 INSERT INTO `administrador` (`id`, `nome`, `email`, `idUsuario`, `idComuna`) VALUES
-(1, 'Root Master', 'rota@gmail.com', 1, 193);
+(1, 'Root Master', 'teste@gmail.com', 1, 193);
 
 -- --------------------------------------------------------
 
@@ -845,7 +845,9 @@ INSERT INTO `outdoor` (`id`, `tipo`, `preco`, `idComuna`, `estado`, `eliminado`,
 (2, 'Paineis Não Luminosos', 20000, 155, 'Por Validar Pagamento', 'nao', 7),
 (3, 'Faixadas', 5000, 155, 'Por Validar Pagamento', 'nao', 7),
 (4, 'Placas \r\nIndicativas', 5000, 155, 'Ocupado', 'nao', 7),
-(5, 'Lampoles', 5000, 155, 'Por Validar Pagamento', 'nao', 7);
+(5, 'Lampoles', 5000, 155, 'Ocupado', 'nao', 7),
+(6, 'Paineis Luminosos', 3000, 43, 'Disponivel', 'nao', 11),
+(7, 'Paineis Nao Luminosos', 1500, 69, 'Disponivel', 'nao', 11);
 
 -- --------------------------------------------------------
 
@@ -873,8 +875,8 @@ CREATE TABLE `pedidos` (
 
 INSERT INTO `pedidos` (`id`, `idGestor`, `idCliente`, `imagem`, `dataInicio`, `dataFim`, `total`, `idOutdoor`, `eliminado`, `estado`, `recibo`) VALUES
 (1, 7, 5, NULL, '2023-07-01', '2023-07-31', 15000, 3, 'nao', 'nao aprovado', NULL),
-(2, 9, 6, NULL, '2023-07-03', '2023-07-28', 1000, 4, 'nao', 'aprovado', 'http://localhost/gestOutdoor/content/comprovativo/64bd57cf0359c_outdoorgest.pdf'),
-(3, 11, 5, NULL, '2023-07-04', '2023-07-26', 10000, 5, 'nao', 'nao aprovado', NULL),
+(2, 7, 6, NULL, '2023-07-03', '2023-07-28', 1000, 4, 'nao', 'aprovado', 'http://localhost/gestOutdoor/content/comprovativo/64bd57cf0359c_outdoorgest.pdf'),
+(3, 7, 5, NULL, '2023-07-04', '2023-07-26', 10000, 5, 'nao', 'aprovado', NULL),
 (4, 10, 5, 'http://localhost/gestOutdoor/content/images/64bd57cf03334_DER.png', '2023-07-13', '2023-07-13', 35000, 3, 'nao', 'nao aprovado', 'http://localhost/gestOutdoor/content/comprovativo/64bd57cf0359c_outdoorgest.pdf'),
 (5, 10, 5, 'http://localhost/gestOutdoor/content/images/64bd57e87f952_Diagrama de Classes.png', '2023-07-13', '2023-07-13', 100000, 2, 'nao', 'nao aprovado', 'http://localhost/gestOutdoor/content/comprovativo/64bd57e87fba0_outdoorgest.pdf');
 
@@ -938,7 +940,7 @@ INSERT INTO `usuario` (`id`, `username`, `senha`, `tipo`, `eliminado`) VALUES
 (7, 'gestor', '123', 'Gestor', 'nao'),
 (9, 'gestor2', '123', 'Gestor', 'nao'),
 (10, 'gestor3', '123', 'Gestor', 'nao'),
-(11, 'gestor4', '123', 'Gestor', 'nao');
+(11, 'gest', '123', 'Gestor', 'nao');
 
 --
 -- Índices para tabelas despejadas
@@ -1051,7 +1053,7 @@ ALTER TABLE `municipio`
 -- AUTO_INCREMENT de tabela `outdoor`
 --
 ALTER TABLE `outdoor`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de tabela `pedidos`
